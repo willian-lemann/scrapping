@@ -21,10 +21,10 @@ export class PuppeterService {
 
     if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
       instancePuppeteer = await puppeteerCore.launch({
-        args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
+        args: chromium.args,
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath,
-        headless: true,
+        headless: chromium.headless,
         ignoreHTTPSErrors: true,
       });
     } else {
