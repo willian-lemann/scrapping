@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
 
+import chromium from 'chrome-aws-lambda';
+
 @Injectable()
 export class PuppeterService {
   private puppeterInstance = null;
@@ -14,6 +16,20 @@ export class PuppeterService {
   }
 
   async getInstance() {
-    return await puppeteer.launch({ headless: 'new' });
+    let instancePuppeteer;
+
+    if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+      instancePuppeteer = await chromium.puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true,
+      });
+    } else {
+      instancePuppeteer = await puppeteer.launch({ headless: 'new' });
+    }
+
+    return instancePuppeteer as puppeteer.Browser;
   }
 }
