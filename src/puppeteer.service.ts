@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
+import puppeteerCore from 'puppeteer-core';
 
 import chromium from 'chrome-aws-lambda';
 
@@ -19,11 +20,11 @@ export class PuppeterService {
     let instancePuppeteer;
 
     if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-      instancePuppeteer = await chromium.puppeteer.launch({
-        args: chromium.args,
+      instancePuppeteer = await puppeteerCore.launch({
+        args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath,
-        headless: chromium.headless,
+        headless: true,
         ignoreHTTPSErrors: true,
       });
     } else {
