@@ -5,7 +5,7 @@ import { PuppeterService } from './puppeteer.service';
 export class AppService {
   constructor(private readonly puppeterService: PuppeterService) {}
 
-  async getImoveis(): Promise<any> {
+  async getRealEstateData(): Promise<any> {
     const browser = await this.puppeterService.getInstance();
 
     const page = await browser.newPage();
